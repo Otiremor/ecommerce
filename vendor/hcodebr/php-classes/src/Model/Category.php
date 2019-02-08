@@ -33,7 +33,7 @@ class Category extends Model
         $sql = new Sql();
         
         $results = $sql->select("SELECT * FROM tb_categories WHERE idcategory = :idcategory", [
-            "idcategory" => $idcategory
+            ":idcategory" => $idcategory
         ]);
         
         $this->setData($results[0]);
@@ -44,7 +44,7 @@ class Category extends Model
         $sql = new Sql();
         
         $sql->query("DELETE FROM tb_categories WHERE idcategory = :idcategory", [
-            "idcategory" => $this->getidcategory()
+            ":idcategory" => $this->getidcategory()
         ]);
         
         Category::updateFile();
