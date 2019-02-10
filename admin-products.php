@@ -2,7 +2,7 @@
 use Hcode\Model\User;
 use Hcode\Model\Products;
 use Hcode\PageAdmin;
-use Hcode\Page;
+//use Hcode\Page;
 
 $app->get("/admin/products", function () {
     User::verifyLogin();
