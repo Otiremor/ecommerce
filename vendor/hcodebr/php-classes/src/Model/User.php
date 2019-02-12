@@ -48,7 +48,7 @@ class User extends Model
     {
         $sql = new Sql();
         
-        $results = $sql->select("SELECT * FROM tb_users WHERE deslogin = :LOGIN", array(
+        $results = $sql->select("SELECT * FROM tb_users a INNER JOIN tb_persons b ON a.idperson = b.idperson WHERE a.deslogin = :LOGIN", array(
             ":LOGIN" => $login
         ));
         
@@ -60,6 +60,8 @@ class User extends Model
         
         if (password_verify($password, $data["despassword"]) === true) {
             $user = new User();
+            
+            $data["desperson"] = utf8_encode($data["desperson"]);
             
             // $user->setiduser($data["iduser"]);
             $user->setData($data);
@@ -79,8 +81,13 @@ class User extends Model
 
     public static function verifyLogin($inadmin = true)
     {
-        if (User::checkLogin($inadmin)) {
-            header("Location: /admin/login");
+        if (!User::checkLogin($inadmin)) {
+            if ($inadmin) {
+                header("Location: /admin/login");
+            } else {
+                header("Location: /login");
+            }
+            
             exit();
         }
     }
@@ -221,11 +228,11 @@ class User extends Model
             INNER JOIN tb_users b USING(iduser)
             INNER JOIN tb_persons c USING(idperson)
             WHERE
-            a.idrecovery = :idrecovery
-            AND
-            a.dtrecovery IS NULL
-            AND
-            DATE_ADD(a.dtregister, INTERVAL 1 HOUR) >= NOW();
+                a.idrecovery = :idrecovery
+                AND
+                a.dtrecovery IS NULL
+                AND
+                DATE_ADD(a.dtregister, INTERVAL 1 HOUR) >= NOW();
         ", array(
             ":idrecovery" => $idrecovery
         ));

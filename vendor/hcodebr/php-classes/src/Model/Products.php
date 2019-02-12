@@ -3,7 +3,7 @@ namespace Hcode\Model;
 
 use \Hcode\DB\Sql;
 use \Hcode\Model;
-use \Hcode\Mailer;
+//use \Hcode\Mailer;
 
 class Products extends Model
 {
@@ -36,7 +36,7 @@ class Products extends Model
             ":vlprice" => $this->getvlprice(),
             ":vlwidth" => $this->getvlwidth(),
             ":vlheight" => $this->getvlheight(),
-            ":vllength" => $this->getvllenght(),
+            ":vllength" => $this->getvllength(),
             ":vlweight" => $this->getvlweight(),
             ":desurl" => $this->getdesurl()
         ));
