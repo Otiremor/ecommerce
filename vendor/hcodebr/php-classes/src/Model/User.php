@@ -67,17 +67,15 @@ class User extends Model
             
             $data["desperson"] = utf8_encode($data["desperson"]);
             
-            // $user->setiduser($data["iduser"]);
+            //$user->setiduser($data["iduser"]);
             $user->setData($data);
             
             $_SESSION[User::SESSION] = $user->getValues();
             
             return $user;
             
-            /*
-             * var_dump($user);
-             * exit();
-             */
+            /*var_dump($user);
+             exit();*/
         } else {
             throw new \Exception("Usuário inexistente ou senha inválida.");
         }
@@ -292,7 +290,7 @@ class User extends Model
         $_SESSION[User::ERROR] = NULL;
     }
     
-    /*public static function setErrorRegister($msg)
+    public static function setErrorRegister($msg)
     {
         $_SESSION[User::ERROR_REGISTER] = $msg;
     }
@@ -320,7 +318,7 @@ class User extends Model
         ]);
         
         return (count($results) > 0);
-    }*/
+    }
     
     public static function getPasswordHash($password)
     {
