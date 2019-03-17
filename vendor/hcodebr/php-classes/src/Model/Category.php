@@ -1,10 +1,10 @@
 <?php
 namespace Hcode\Model;
 
-use \Hcode\DB\Sql;
-use \Hcode\Model;
-//use \Hcode\Mailer;
+use Hcode\DB\Sql;
+use Hcode\Model;
 
+// use \Hcode\Mailer;
 class Category extends Model
 {
 
@@ -92,7 +92,7 @@ class Category extends Model
             ]);
         }
     }
-    
+
     public function getProductsPage($page = 1, $itensPerPage = 8)
     {
         $start = ($page - 1) * $itensPerPage;
@@ -107,18 +107,18 @@ class Category extends Model
                         WHERE c.idcategory = :idcategory
                         LIMIT $start, $itensPerPage;
                    ", [
-                       ":idcategory" => $this->getidcategory()
-                   ]);
+            ":idcategory" => $this->getidcategory()
+        ]);
         
         $resultTotal = $sql->select("SELECT FOUND_ROWS() AS nrtotal;");
         
         return [
             "data" => Products::checkList($results),
-            "total" => (int)$resultTotal[0]["nrtotal"],
+            "total" => (int) $resultTotal[0]["nrtotal"],
             "pages" => ceil($resultTotal[0]["nrtotal"] / $itensPerPage)
         ];
     }
-    
+
     public function addProduct(Products $product)
     {
         $sql = new Sql();
@@ -128,7 +128,7 @@ class Category extends Model
             ":idproduct" => $product->getidproduct()
         ]);
     }
-    
+
     public function removeProduct(Products $product)
     {
         $sql = new Sql();
@@ -137,6 +137,53 @@ class Category extends Model
             ":idcategory" => $this->getidcategory(),
             ":idproduct" => $product->getidproduct()
         ]);
+    }
+
+    public static function getPage($page = 1, $itensPerPage = 10)
+    {
+        $start = ($page - 1) * $itensPerPage;
+        
+        $sql = new Sql();
+        
+        $results = $sql->select("
+            SELECT SQL_CALC_FOUND_ROWS *
+            FROM tb_categories
+            ORDER BY descategory
+            LIMIT $start, $itensPerPage;
+        ");
+        
+        $resultTotal = $sql->select("SELECT FOUND_ROWS() AS nrtotal;");
+        
+        return [
+            "data" => $results,
+            "total" => (int)$resultTotal[0]["nrtotal"],
+            "pages" => ceil($resultTotal[0]["nrtotal"] / $itensPerPage)
+        ];
+    }
+
+    public static function getPageSearch($search, $page = 1, $itensPerPage = 10)
+    {
+        $start = ($page - 1) * $itensPerPage;
+        
+        $sql = new Sql();
+        
+        $results = $sql->select("
+            SELECT SQL_CALC_FOUND_ROWS *
+            FROM tb_categories
+            WHERE descategory LIKE :search
+            ORDER BY descategory
+            LIMIT $start, $itensPerPage;
+        ", [
+            "search" => "%" . $search . "%"
+        ]);
+        
+        $resultTotal = $sql->select("SELECT FOUND_ROWS() AS nrtotal;");
+        
+        return [
+            "data" => $results,
+            "total" => (int)$resultTotal[0]["nrtotal"],
+            "pages" => ceil($resultTotal[0]["nrtotal"] / $itensPerPage)
+        ];
     }
 }
 ?>
