@@ -174,7 +174,7 @@ class Category extends Model
             ORDER BY descategory
             LIMIT $start, $itensPerPage;
         ", [
-            "search" => "%" . $search . "%"
+            ":search" => "%" . $search . "%"
         ]);
         
         $resultTotal = $sql->select("SELECT FOUND_ROWS() AS nrtotal;");
