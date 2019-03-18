@@ -156,7 +156,7 @@ class Category extends Model
         
         return [
             "data" => $results,
-            "total" => (int)$resultTotal[0]["nrtotal"],
+            "total" => (int) $resultTotal[0]["nrtotal"],
             "pages" => ceil($resultTotal[0]["nrtotal"] / $itensPerPage)
         ];
     }
@@ -181,7 +181,7 @@ class Category extends Model
         
         return [
             "data" => $results,
-            "total" => (int)$resultTotal[0]["nrtotal"],
+            "total" => (int) $resultTotal[0]["nrtotal"],
             "pages" => ceil($resultTotal[0]["nrtotal"] / $itensPerPage)
         ];
     }

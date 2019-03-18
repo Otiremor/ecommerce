@@ -1,23 +1,23 @@
 <?php
 namespace Hcode\Model;
 
-use \Hcode\DB\Sql;
-use \Hcode\Model;
-//use \Hcode\Mailer;
+use Hcode\DB\Sql;
+use Hcode\Model;
 
+// use \Hcode\Mailer;
 class Products extends Model
 {
+
     public static function listAll()
     {
         $sql = new Sql();
         
         return $sql->select("SELECT * FROM tb_products ORDER BY desproduct");
     }
-    
+
     public static function checkList($list)
     {
-        foreach ($list as &$row)
-        {
+        foreach ($list as &$row) {
             $p = new Products();
             $p->setData($row);
             $row = $p->getValues();
@@ -25,7 +25,7 @@ class Products extends Model
         
         return $list;
     }
-    
+
     public function save()
     {
         $sql = new Sql();
@@ -43,7 +43,7 @@ class Products extends Model
         
         $this->setData($results[0]);
     }
-    
+
     public function get($idproduct)
     {
         $sql = new Sql();
@@ -54,7 +54,7 @@ class Products extends Model
         
         $this->setData($results[0]);
     }
-    
+
     public function delete()
     {
         $sql = new Sql();
@@ -63,28 +63,18 @@ class Products extends Model
             ":idproduct" => $this->getidproduct()
         ]);
     }
-    
+
     public function checkPhoto()
     {
-        if (file_exists(
-            $_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR .
-            "res" . DIRECTORY_SEPARATOR .
-            "site" . DIRECTORY_SEPARATOR .
-            "img" . DIRECTORY_SEPARATOR .
-            "products" . DIRECTORY_SEPARATOR .
-            $this->getidproduct() . ".jpg"
-            ))
-        {
+        if (file_exists($_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . "res" . DIRECTORY_SEPARATOR . "site" . DIRECTORY_SEPARATOR . "img" . DIRECTORY_SEPARATOR . "products" . DIRECTORY_SEPARATOR . $this->getidproduct() . ".jpg")) {
             $url = "/res/site/img/products/" . $this->getidproduct() . ".jpg";
-        }
-        else
-        {
+        } else {
             $url = "/res/site/img/product.jpg";
         }
         
         return $this->setdesphoto($url);
     }
-    
+
     public function getValues()
     {
         $this->checkPhoto();
@@ -93,19 +83,18 @@ class Products extends Model
         
         return $values;
     }
-    
+
     public function setPhoto($file)
     {
         $extension = explode(".", $file["name"]);
         $extension = end($extension);
         
-        switch ($extension)
-        {
+        switch ($extension) {
             case "jpg":
             case "jpeg":
                 $image = imagecreatefromjpeg($file["tmp_name"]);
                 break;
-                
+            
             case "gif":
                 $image = imagecreatefromgif($file["tmp_name"]);
                 break;
@@ -114,12 +103,7 @@ class Products extends Model
                 break;
         }
         
-        $dist = $_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR .
-        "res" . DIRECTORY_SEPARATOR .
-        "site" . DIRECTORY_SEPARATOR .
-        "img" . DIRECTORY_SEPARATOR .
-        "products" . DIRECTORY_SEPARATOR .
-        $this->getidproduct() . ".jpg";
+        $dist = $_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . "res" . DIRECTORY_SEPARATOR . "site" . DIRECTORY_SEPARATOR . "img" . DIRECTORY_SEPARATOR . "products" . DIRECTORY_SEPARATOR . $this->getidproduct() . ".jpg";
         
         imagejpeg($image, $dist);
         
@@ -127,7 +111,7 @@ class Products extends Model
         
         $this->checkPhoto();
     }
-    
+
     public function getFromURL($desurl)
     {
         $sql = new Sql();
@@ -138,7 +122,7 @@ class Products extends Model
         
         $this->setData($rows[0]);
     }
-    
+
     public function getCategories()
     {
         $sql = new Sql();
@@ -147,7 +131,7 @@ class Products extends Model
             ":idproduct" => $this->getidproduct()
         ]);
     }
-    
+
     public static function getPage($page = 1, $itensPerPage = 10)
     {
         $start = ($page - 1) * $itensPerPage;
@@ -165,11 +149,11 @@ class Products extends Model
         
         return [
             "data" => $results,
-            "total" => (int)$resultTotal[0]["nrtotal"],
+            "total" => (int) $resultTotal[0]["nrtotal"],
             "pages" => ceil($resultTotal[0]["nrtotal"] / $itensPerPage)
         ];
     }
-    
+
     public static function getPageSearch($search, $page = 1, $itensPerPage = 10)
     {
         $start = ($page - 1) * $itensPerPage;
@@ -190,7 +174,7 @@ class Products extends Model
         
         return [
             "data" => $results,
-            "total" => (int)$resultTotal[0]["nrtotal"],
+            "total" => (int) $resultTotal[0]["nrtotal"],
             "pages" => ceil($resultTotal[0]["nrtotal"] / $itensPerPage)
         ];
     }
